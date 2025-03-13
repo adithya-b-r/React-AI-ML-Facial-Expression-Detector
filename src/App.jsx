@@ -62,7 +62,7 @@ function App() {
           const { age, gender, genderProbability } = result;
           const text = `${Math.round(age)} years\n${gender} (${(genderProbability * 100).toFixed(1)}%)`;
           const { x, y } = result.detection.box;
-          ctx.fillStyle = 'white';
+          ctx.fillStyle = 'yellow';
           ctx.font = '16px Arial';
           ctx.fillText(text, x, y - 30);
         });
