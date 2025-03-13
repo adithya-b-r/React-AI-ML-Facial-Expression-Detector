@@ -78,7 +78,7 @@ function App() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
-      <h1 className="text-3xl font-bold mb-4">😊 AI Facial Analysis 🎭</h1>
+      <h1 className="text-3xl font-bold mb-8">😊 AI Facial Analysis 🎭</h1>
       <div className="flex space-x-4">
         {captureVideo && modelsLoaded ? (
           <button onClick={closeWebcam} className="px-6 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg shadow-md transition">🛑 Stop Analysis</button>
