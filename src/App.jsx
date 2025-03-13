@@ -1,102 +1,90 @@
 import * as faceapi from 'face-api.js';
 import React from 'react';
+import './App.css'
 
 function App() {
-
   const [modelsLoaded, setModelsLoaded] = React.useState(false);
   const [captureVideo, setCaptureVideo] = React.useState(false);
 
   const videoRef = React.useRef();
-  const videoHeight = 480;
-  const videoWidth = 640;
   const canvasRef = React.useRef();
 
   React.useEffect(() => {
     const loadModels = async () => {
       const MODEL_URL = '/models';
 
-      Promise.all([
+      await Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
         faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
         faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
         faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
-      ]).then(setModelsLoaded(true));
-    }
+      ]);
+      setModelsLoaded(true);
+    };
     loadModels();
   }, []);
 
   const startVideo = () => {
     setCaptureVideo(true);
     navigator.mediaDevices
-      .getUserMedia({ video: { width: 300 } })
+      .getUserMedia({ video: true })
       .then(stream => {
         let video = videoRef.current;
         video.srcObject = stream;
         video.play();
       })
-      .catch(err => {
-        console.error("error:", err);
-      });
-  }
+      .catch(err => console.error("Error accessing webcam:", err));
+  };
 
   const handleVideoOnPlay = () => {
     setInterval(async () => {
-      if (canvasRef && canvasRef.current) {
-        canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoRef.current);
+      if (canvasRef.current) {
         const displaySize = {
-          width: videoWidth,
-          height: videoHeight
-        }
+          width: videoRef.current.videoWidth,
+          height: videoRef.current.videoHeight
+        };
 
         faceapi.matchDimensions(canvasRef.current, displaySize);
-
-        const detections = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
-
+        const detections = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions())
+          .withFaceLandmarks()
+          .withFaceExpressions();
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-        canvasRef && canvasRef.current && canvasRef.current.getContext('2d').clearRect(0, 0, videoWidth, videoHeight);
-        canvasRef && canvasRef.current && faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
-        canvasRef && canvasRef.current && faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
-        canvasRef && canvasRef.current && faceapi.draw.drawFaceExpressions(canvasRef.current, resizedDetections);
+        const ctx = canvasRef.current.getContext('2d');
+        ctx.clearRect(0, 0, displaySize.width, displaySize.height);
+        faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
+        faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
+        faceapi.draw.drawFaceExpressions(canvasRef.current, resizedDetections);
       }
-    }, 100)
-  }
+    }, 100);
+  };
 
   const closeWebcam = () => {
     videoRef.current.pause();
-    videoRef.current.srcObject.getTracks()[0].stop();
+    videoRef.current.srcObject.getTracks().forEach(track => track.stop());
     setCaptureVideo(false);
-  }
+  };
 
   return (
-    <div>
-      <div style={{ textAlign: 'center', padding: '10px' }}>
-        {
-          captureVideo && modelsLoaded ?
-            <button onClick={closeWebcam} style={{ cursor: 'pointer', backgroundColor: 'green', color: 'white', padding: '15px', fontSize: '25px', border: 'none', borderRadius: '10px' }}>
-              Close Webcam
-            </button>
-            :
-            <button onClick={startVideo} style={{ cursor: 'pointer', backgroundColor: 'green', color: 'white', padding: '15px', fontSize: '25px', border: 'none', borderRadius: '10px' }}>
-              Open Webcam
-            </button>
-        }
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+      <h1 className="text-3xl font-bold mb-8 tracking-tighter">😊 AI Emotion Detector 🎭</h1>
+      <div className="flex space-x-4">
+        {captureVideo && modelsLoaded ? (
+          <button onClick={closeWebcam} className="px-6 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg shadow-md transition">🛑 Stop Analysis</button>
+        ) : (
+          <button onClick={startVideo} className="px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg shadow-md transition">🎥 Analyze Emotions</button>
+        )}
       </div>
-      {
-        captureVideo ?
-          modelsLoaded ?
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
-                <video ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
-                <canvas ref={canvasRef} style={{ position: 'absolute' }} />
-              </div>
-            </div>
-            :
-            <div>loading...</div>
-          :
+      <div className="relative mt-6 w-full max-w-2xl">
+        {captureVideo && modelsLoaded ? (
           <>
+            <video ref={videoRef} onPlay={handleVideoOnPlay} className="rounded-lg shadow-lg w-full" />
+            <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full" />
           </>
-      }
+        ) : (
+          <p className="text-gray-400 mt-4 text-center">✨ Click "🎥 Analyze Emotions" to start ✨</p>
+        )}
+      </div>
     </div>
   );
 }
