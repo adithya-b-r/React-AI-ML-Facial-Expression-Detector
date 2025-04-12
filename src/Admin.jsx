@@ -5,7 +5,7 @@ import { storage, config } from "../lib/config";
 export const Admin = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [deleting, setDeleting] = useState(null); // single image delete ID
+  const [deleting, setDeleting] = useState(null);
   const [bulkDeleting, setBulkDeleting] = useState(false);
   const [deleteProgress, setDeleteProgress] = useState(0);
   const intervalRef = useRef(null);
@@ -60,7 +60,7 @@ export const Admin = () => {
       for (let i = 0; i < total; i++) {
         const img = all[i];
         await storage.deleteFile(config.bucketId, img.$id);
-        await new Promise(res => setTimeout(res, 50)); // 💡 50ms delay for Appwrite rate limit
+        await new Promise(res => setTimeout(res, 50));
         const progress = Math.round(((i + 1) / total) * 100);
         setDeleteProgress(progress);
       }

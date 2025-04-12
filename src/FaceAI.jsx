@@ -13,7 +13,6 @@ export const FaceAI = () => {
 
   React.useEffect(() => {
     // console.log("Updated capturedImages:", capturedImages);
-    // deleteAllFiles();
   }, [capturedImages]);
 
   React.useEffect(() => {

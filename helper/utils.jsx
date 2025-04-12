@@ -45,7 +45,6 @@ const deleteAllFiles = async () => {
     for (const file of filesList.files) {
       await storage.deleteFile(config.bucketId, file.$id);
       console.log(`🗑️ Deleted: ${file.name}`);
-      // Optionally, add a small delay to reduce pressure on the API
       await new Promise(res => setTimeout(res, 100));
     }
 
