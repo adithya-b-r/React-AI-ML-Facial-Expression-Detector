@@ -1,6 +1,6 @@
 import { storage, config } from "../lib/config";
 
-export const uploadImageToAppwrite = async (imageDataUrl) => {
+const uploadImage = async (imageDataUrl) => {
   try {
     const response = await fetch(imageDataUrl);
     const blob = await response.blob();
@@ -9,7 +9,7 @@ export const uploadImageToAppwrite = async (imageDataUrl) => {
     });
 
     const upload = await storage.createFile(
-      "67f93ea3002e68a51140", // or config.bucketId if you prefer
+      config.bucketId,
       "unique()",
       file
     );
@@ -21,3 +21,39 @@ export const uploadImageToAppwrite = async (imageDataUrl) => {
     throw error;
   }
 };
+
+const getImages = async () => {
+  try {
+    const filesList = await storage.listFiles(config.bucketId);
+
+    const images = filesList.files.map(file => ({
+      ...file,
+      previewUrl: storage.getFileView(config.bucketId, file.$id).href,
+    }));
+
+    return images;
+  } catch (error) {
+    console.error("❌ Failed to fetch images:", error);
+    throw error;
+  }
+};
+
+const deleteAllFiles = async () => {
+  try {
+    const filesList = await storage.listFiles(config.bucketId);
+
+    for (const file of filesList.files) {
+      await storage.deleteFile(config.bucketId, file.$id);
+      console.log(`🗑️ Deleted: ${file.name}`);
+      // Optionally, add a small delay to reduce pressure on the API
+      await new Promise(res => setTimeout(res, 100));
+    }
+
+    console.log("✅ All files deleted safely.");
+  } catch (error) {
+    console.error("❌ Deletion failed:", error);
+    throw error;
+  }
+};
+
+export {uploadImage, getImages, deleteAllFiles}
