@@ -1,4 +1,5 @@
 import { storage, config } from "../lib/config";
+import { Query } from "appwrite";
 
 const uploadImage = async (imageDataUrl) => {
   try {
@@ -23,20 +24,40 @@ const uploadImage = async (imageDataUrl) => {
 };
 
 const getImages = async () => {
+  const allImages = [];
+  let lastFileId = undefined;
+  let hasMore = true;
+
   try {
-    const filesList = await storage.listFiles(config.bucketId);
+    while (hasMore) {
+      const queries = [Query.limit(100)];
+      if (lastFileId) {
+        queries.push(Query.cursorAfter(lastFileId));
+      }
 
-    const images = filesList.files.map(file => ({
-      ...file,
-      previewUrl: storage.getFileView(config.bucketId, file.$id).href,
-    }));
+      const filesList = await storage.listFiles(config.bucketId, queries);
 
-    return images;
+      const images = filesList.files.map(file => ({
+        ...file,
+        previewUrl: storage.getFileView(config.bucketId, file.$id).href,
+      }));
+
+      allImages.push(...images);
+
+      if (filesList.files.length < 100) {
+        hasMore = false;
+      } else {
+        lastFileId = filesList.files[filesList.files.length - 1].$id;
+      }
+    }
+
+    return allImages;
   } catch (error) {
     console.error("❌ Failed to fetch images:", error);
     throw error;
   }
 };
+
 
 const deleteAllFiles = async () => {
   try {

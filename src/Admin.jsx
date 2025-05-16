@@ -12,13 +12,15 @@ export const Admin = () => {
 
   useEffect(() => {
     fetchAndSetImages();
-    intervalRef.current = setInterval(fetchAndSetImages, 2000);
-    return () => clearInterval(intervalRef.current);
+    // intervalRef.current = setInterval(fetchAndSetImages, 2000);
+    // return () => clearInterval(intervalRef.current);
   }, []);
 
   const fetchAndSetImages = async () => {
     try {
       const newImages = await getImages();
+      console.log(newImages)
+
       setImages(prev => {
         const prevIds = prev.map(i => i.$id).sort().join(",");
         const newIds = newImages.map(i => i.$id).sort().join(",");
