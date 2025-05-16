@@ -8,7 +8,7 @@ export const Admin = () => {
   const [deleting, setDeleting] = useState(null);
   const [bulkDeleting, setBulkDeleting] = useState(false);
   const [deleteProgress, setDeleteProgress] = useState(0);
-  const intervalRef = useRef(null);
+  // const intervalRef = useRef(null);
 
   useEffect(() => {
     fetchAndSetImages();

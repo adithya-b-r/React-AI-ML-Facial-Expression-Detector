@@ -106,7 +106,7 @@ export const FaceAI = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+    <div className="flex flex-col items-center justify-center h-[100vh] bg-gray-900 text-white p-4">
       <h1 className="text-3xl font-bold mb-8">😊 AI Facial Analysis 🎭</h1>
       <div className="flex space-x-4">
         {captureVideo && modelsLoaded ? (
