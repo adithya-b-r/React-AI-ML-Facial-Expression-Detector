@@ -34,7 +34,7 @@ export const Admin = () => {
   };
 
   const handleDelete = async (imageId) => {
-    return "He He, This option is being disabled :)";
+    return alert("He He, This option is being disabled :)");
 
     const confirmed = window.confirm("Delete this image?");
     if (!confirmed) return;
@@ -52,7 +52,7 @@ export const Admin = () => {
   };
 
   const handleDeleteAll = async () => {
-    return "He He, This option is being disabled :)";
+    return alert("He He, This option is being disabled :)");
 
     const confirmed = window.confirm("Delete all images?");
     if (!confirmed) return;
