@@ -34,6 +34,8 @@ export const Admin = () => {
   };
 
   const handleDelete = async (imageId) => {
+    return "He He, This option is being disabled :)";
+
     const confirmed = window.confirm("Delete this image?");
     if (!confirmed) return;
 
@@ -50,15 +52,17 @@ export const Admin = () => {
   };
 
   const handleDeleteAll = async () => {
+    return "He He, This option is being disabled :)";
+
     const confirmed = window.confirm("Delete all images?");
     if (!confirmed) return;
-  
+
     try {
       setBulkDeleting(true);
       setDeleteProgress(0);
       const all = await getImages();
       const total = all.length;
-  
+
       for (let i = 0; i < total; i++) {
         const img = all[i];
         await storage.deleteFile(config.bucketId, img.$id);
@@ -66,7 +70,7 @@ export const Admin = () => {
         const progress = Math.round(((i + 1) / total) * 100);
         setDeleteProgress(progress);
       }
-  
+
       setImages([]);
     } catch (err) {
       console.error("Bulk delete failed", err);
