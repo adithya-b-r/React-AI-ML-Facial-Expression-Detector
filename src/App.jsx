@@ -10,7 +10,7 @@ function App() {
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<FaceAI/>} />
-        <Route path="/faceadmin" element={<Admin/>} />
+        <Route path="/fa" element={<Admin/>} />
         <Route path="*" element={<PageNotFound/>} />
     </Routes>
   </BrowserRouter>
