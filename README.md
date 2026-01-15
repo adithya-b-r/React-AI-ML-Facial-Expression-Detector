@@ -146,15 +146,15 @@ Before running this application, ensure you have:
 React-AI-ML-Facial-Expression-Detector/
 │
 ├── public/
-│   └── models/              # Pre-trained face-api.js models (multiple files per model)
-│       ├── tiny_face_detector_model-*
-│       ├── ssd_mobilenetv1_model-*
-│       ├── mtcnn_model-*
-│       ├── face_landmark_68_model-*
-│       ├── face_landmark_68_tiny_model-*
-│       ├── face_recognition_model-*
-│       ├── face_expression_model-*
-│       └── age_gender_model-*
+│   └── models/              # Pre-trained face-api.js models
+│       ├── tiny_face_detector_model-shard1 & weights_manifest.json
+│       ├── ssd_mobilenetv1_model-shard1/2 & weights_manifest.json
+│       ├── mtcnn_model-shard1 & weights_manifest.json
+│       ├── face_landmark_68_model-shard1 & weights_manifest.json
+│       ├── face_landmark_68_tiny_model-shard1 & weights_manifest.json
+│       ├── face_recognition_model-shard1/2 & weights_manifest.json
+│       ├── face_expression_model-shard1 & weights_manifest.json
+│       └── age_gender_model-shard1 & weights_manifest.json
 │
 ├── src/
 │   ├── FaceAI.jsx          # Main facial analysis component
