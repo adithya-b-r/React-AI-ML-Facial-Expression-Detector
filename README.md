@@ -117,11 +117,15 @@ Before running this application, ensure you have:
 - **Vite 6.4.1** - Next-generation frontend build tool
 - **React Router DOM 7.12.0** - Declarative routing for React applications
 - **Tailwind CSS 3.4.17** - Utility-first CSS framework
+- **@tailwindcss/vite 4.0.14** - Tailwind CSS integration for Vite
 
 ### AI/ML Libraries
 - **face-api.js 0.22.2** - JavaScript face recognition library
   - TinyFaceDetector - Lightweight face detection model
+  - SSD MobileNet V1 - Alternative face detection model
+  - MTCNN - Multi-task Cascaded Convolutional Networks for face detection
   - FaceLandmark68Net - 68-point facial landmark detection
+  - FaceLandmark68TinyNet - Lightweight landmark detection
   - FaceRecognitionNet - Face recognition features
   - FaceExpressionNet - Expression classification
   - AgeGenderNet - Age and gender prediction
@@ -133,7 +137,7 @@ Before running this application, ensure you have:
 
 ### Development Tools
 - **ESLint 9.21.0** - JavaScript linting utility
-- **PostCSS 8.5.3** - CSS transformation tool
+- **PostCSS 8.5.3+** - CSS transformation tool
 - **Autoprefixer 10.4.21** - CSS vendor prefix automation
 
 ## 📁 Project Structure
@@ -142,12 +146,15 @@ Before running this application, ensure you have:
 React-AI-ML-Facial-Expression-Detector/
 │
 ├── public/
-│   └── models/              # Pre-trained face-api.js models
-│       ├── tiny_face_detector_model
-│       ├── face_landmark_68_model
-│       ├── face_recognition_model
-│       ├── face_expression_model
-│       └── age_gender_model
+│   └── models/              # Pre-trained face-api.js models (multiple files per model)
+│       ├── tiny_face_detector_model-*
+│       ├── ssd_mobilenetv1_model-*
+│       ├── mtcnn_model-*
+│       ├── face_landmark_68_model-*
+│       ├── face_landmark_68_tiny_model-*
+│       ├── face_recognition_model-*
+│       ├── face_expression_model-*
+│       └── age_gender_model-*
 │
 ├── src/
 │   ├── FaceAI.jsx          # Main facial analysis component
